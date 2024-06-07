@@ -10,7 +10,7 @@ class GotenbergService
     private $client;
     private string $gotenbergUrl;
 
-    public function __construct(HttpClientInterface $client)
+    public function __construct(HttpClientInterface $client, string $gotenbergUrl)
     {
         $this->client = $client;
         $this->gotenbergUrl = $gotenbergUrl;
@@ -19,7 +19,10 @@ class GotenbergService
     public function convertUrlToPdf(string $url, string $outputPath): void
     {
         try {
-            $response = $this->client->request('POST', $this->gotenbergUrl . '/forms/chromium/convert/url', [
+            $response = $this->client->request('POST',  $this->gotenbergUrl, [
+                'headers' => [
+                    'Content-Type' => 'multipart/form-data'
+                ],
                 'body' => [
                     'url' => $url
                 ]
